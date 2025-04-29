@@ -1,5 +1,5 @@
 # Project Overview
-This Python project explores global air pollution data to answer the following research questions:
+This Python project analyzes global air pollution data to answer the following research questions:
 
 - Which countries have the highest average Air Quality Index (AQI)?
 - Which pollutant (PM2.5, CO, NO2, Ozone) is most correlated with poor air quality?
@@ -9,10 +9,11 @@ We used Python data science tools and included all topics covered in INFO-B 211:
 
 - Pandas for data handling
 - NumPy for numeric operations
-- SciPy for statistical correlation (Pearson correlation)
-- Matplotlib for basic data visualization
+- SciPy for Pearson correlation analysis
+- Matplotlib for basic plotting
 - Seaborn for enhanced visualization
-- Standard Modules (os, sys if needed)
+- Scikit-learn for machine learning (Decision Tree Regressor)
+- Standard modules (os, sys if needed)
 
 ---
 
@@ -20,9 +21,9 @@ We used Python data science tools and included all topics covered in INFO-B 211:
 
 | File | Description |
 |:-----|:------------|
-| `final_project_code.py` | Main Python script containing all code |
+| `GAP_Final.py` | Main Python script containing all analysis and visualizations |
 | `global_air_pollution_data.csv` | Air pollution dataset |
-| `README.md` | This file - explains the project and code |
+| `README.md` | This file explaining the project |
 
 ---
 
@@ -30,46 +31,51 @@ We used Python data science tools and included all topics covered in INFO-B 211:
 
 1. Install the required libraries:
 ```bash
-pip install pandas numpy matplotlib seaborn scipy
+pip install pandas numpy matplotlib seaborn scipy scikit-learn
 ```
-2. Download the dataset `global_air_pollution_data.csv`.
-3. Run the `final_project_code.py` script.
+2. Make sure the dataset `global_air_pollution_data.csv` is in the correct path.
+3. Run the `GAP_Final.py` script.
 
 The script will output:
-- Bar charts for AQI by country and city
-- Correlation plot between pollutants and AQI
+- Bar charts for AQI rankings by country
+- Correlation analysis between pollutants and AQI
 - Pollutant contribution breakdown for top 10 worst countries
+- Machine learning feature importance results from a Decision Tree Regressor
 
 ---
 
 # Project Workflow
 
 ## 1. Data Import and Cleaning
-- Loaded the CSV file using `pandas.read_csv()`.
-- Renamed the mislabeled column (`co_aqi_value\t` to `co_aqi_value`).
-- Dropped rows with missing `country_name`.
-- Made sure all AQI-related columns are integers.
+- Imported the dataset using `pandas.read_csv()`.
+- Renamed the `co_aqi_value\t` column to `co_aqi_value` to fix formatting.
+- Dropped rows missing a `country_name`.
+- Converted all pollutant AQI columns and `aqi_value` to integers for consistency.
 
 ## 2. Research Question 1 - Country AQI Rankings
-- Grouped data by `country_name` and calculated the average AQI.
-- Sorted and displayed the Top 10 countries with highest average AQI.
-- Used Seaborn barplots for visualization.
+- Grouped the data by `country_name`.
+- Calculated the mean AQI per country.
+- Visualized the Top 10 countries with the highest average AQI using a bar chart (Seaborn).
 
 ## 3. Research Question 2 - Pollutant Correlations
-- Calculated Pearson correlation coefficients between:
-  - CO AQI, Ozone AQI, NO2 AQI, PM2.5 AQI against Overall AQI.
-- Used SciPy's `pearsonr()` function.
-- Visualized pollutant correlations using a Seaborn barplot.
+- Calculated Pearson correlation coefficients between each pollutant (PM2.5, CO, NO2, Ozone) and the overall AQI.
+- Displayed correlation strengths using a horizontal bar chart (Seaborn).
 
 ## 4. Research Question 3 (Optional) - Top 10 Polluted Cities
-- Grouped data by `city_name` to find average AQI.
-- Displayed the Top 10 most polluted cities using a Seaborn barplot.
+- Grouped the data by `city_name` and calculated the mean AQI.
+- Visualized the Top 10 cities with the highest AQI using a Seaborn barplot.
 
-## 5. Deeper Pollutant Analysis
-- Focused on the Top 10 countries with the worst AQI.
-- Normalized pollutant contributions by row.
-- Created stacked bar plots showing pollutant contribution percentages.
-- Summed and visualized total pollutant contributions per country.
+## 5. Deeper Pollutant Contribution Analysis
+- Focused on the Top 10 worst countries by AQI.
+- Normalized pollutant values to determine percentage contributions to AQI per country.
+- Visualized stacked bar plots showing pollutant percentage breakdowns.
+
+## 6. Machine Learning Model
+- Built a `DecisionTreeRegressor` model using scikit-learn.
+- Used `pm2.5_aqi_value`, `co_aqi_value`, `no2_aqi_value`, and `ozone_aqi_value` as features to predict `aqi_value`.
+- Split the data into training and testing sets.
+- Fitted the model and extracted feature importances.
+- Displayed pollutant importance in a ranked DataFrame.
 
 ---
 
@@ -77,34 +83,36 @@ The script will output:
 
 | Library | Purpose |
 |:--------|:--------|
-| pandas | Load, clean, manipulate tabular data |
+| pandas | Load and clean tabular data |
 | numpy | Support numeric calculations |
-| scipy.stats | Calculate Pearson correlations |
-| matplotlib | Create basic custom plots |
-| seaborn | Create advanced statistical graphs |
-| sys/os (optional) | Manage file paths and file handling |
+| scipy.stats | Perform Pearson correlation analysis |
+| matplotlib | Create standard plots |
+| seaborn | Create advanced statistical visualizations |
+| scikit-learn | Machine learning analysis (Decision Tree Regressor) |
+| sys/os (optional) | Standard module utilities |
 
 ---
 
 # Visualizations Produced
 
 - Bar Chart: Top 10 Countries by Average AQI
-- Bar Chart: Pollutant-AQI Correlations
-- Bar Chart: Top 10 Polluted Cities
-- Stacked Bar Chart: Pollutant Contribution in Top 10 Countries
-- Grouped Bar Chart: Total Pollutant Contributions
+- Bar Chart: Correlation of Pollutants with Overall AQI
+- Bar Chart: Top 10 Polluted Cities (Average AQI)
+- Stacked Bar Chart: Pollutant Contribution Breakdown for Top 10 Countries
+- Table: Feature Importance from Decision Tree Regressor
 
 ---
 
 # Project Reflection
 
-- Code is fully organized, commented, and easy to follow.
-- All variable names are written using snake_case.
-- Each major section of the project follows clear and logical steps: import, clean, analyze, visualize.
-- All data visualizations support answering the analytical questions.
+- Code is cleanly structured, commented, and easy to read.
+- Variable names consistently use snake_case.
+- Each section of the project builds logically: import, clean, analyze, visualize, model.
+- Data science concepts were correctly applied to answer research questions.
+- Machine learning modeling extended the analysis for deeper insights.
 
 ---
 
 # Project Limitations
 
-During the attempt to visualize the top 10 most polluted cities, it was discovered that all of the top cities had the maximum AQI value of 500. As a result, the bar chart for cities did not show meaningful variation or clear ranking; it appeared fully colored without distinction. Even when expanding the analysis to the top 50 cities, many still displayed the maximum AQI of 500. Despite different attempts to refine the data, the overwhelming number of cities hitting the maximum AQI limit caused challenges in accurately determining the top
+When trying to visualize the Top 10 most polluted cities, it was found that many cities had the maximum AQI value of 500. As a result, the bar chart did not show meaningful variations between cities; the bars were fully colored and indistinguishable. Expanding the analysis to the Top 50 cities showed the same issue. This heavy concentration at maximum AQI values limited the ability to accurately rank or differentiate cities based on air quality, affecting the usefulness of the city-based visualizations.
