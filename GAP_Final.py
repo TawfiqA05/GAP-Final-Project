@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import pearsonr
 
+
 # load dataset
 pollution_data = pd.read_csv('/Users/lambirghinibugatti/Downloads/B211/global_air_pollution_data.csv')
 
@@ -122,20 +123,39 @@ plt.show()
 
 
 
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 
-# Calculate total contributions for each pollutant in the top 10 worst countries
-total_contributions = top_countries_data.groupby('country_name')[pollutants].sum()
+# Define features (pollutants) and target (AQI)
+pollutants = ['pm2.5_aqi_value', 'co_aqi_value', 'no2_aqi_value', 'ozone_aqi_value']
+X = pollution_data[pollutants]
+y = pollution_data['aqi_value']
 
-# Print the total contributions for each pollutant
-print("Total Contributions of Each Pollutant to AQI in Top 10 Worst Countries:")
-print(total_contributions)
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Visualize total contributions as a bar plot
-total_contributions.plot(kind='bar', figsize=(12, 6), colormap='plasma')
-plt.title('Total Contributions of Pollutants to AQI in Top 10 Worst Countries')
-plt.xlabel('Country')
-plt.ylabel('Total AQI Contribution')
-plt.legend(title='Pollutants')
-plt.tight_layout()
-plt.show()
+# Train a decision tree regressor
+model = DecisionTreeRegressor(random_state=42)
+model.fit(X_train, y_train)
+
+# Get feature importance
+feature_importances = model.feature_importances_
+
+# Create a DataFrame for visualization
+importance_df = pd.DataFrame({'Pollutant': pollutants, 'Importance': feature_importances})
+importance_df = importance_df.sort_values(by='Importance', ascending=False)
+
+# Print feature importance
+print("Feature Importance for Predicting AQI:")
+print(importance_df)
+
+
+
+
+
+
+
+
+
 
